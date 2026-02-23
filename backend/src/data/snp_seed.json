@@ -1,0 +1,135 @@
+{
+  "snps": [
+    {
+      "name": "GlobalLinker",
+      "platform_name": "GlobalLinker",
+      "description": "Broad category coverage, strong in manufacturing sector, B2B focus. Best for Handicrafts (RET16), Fashion (RET12), multi-category MSEs, B2B sellers.",
+      "contact_email": "ondc@globallinker.com",
+      "ondc_live_status": true,
+      "supported_categories": [
+        "ONDC:RET10",
+        "ONDC:RET12",
+        "ONDC:RET13",
+        "ONDC:RET14",
+        "ONDC:RET15",
+        "ONDC:RET16",
+        "ONDC:RET18"
+      ],
+      "supported_states": [
+        "All India"
+      ],
+      "b2b": true,
+      "b2c": true,
+      "avg_onboarding_days": 7,
+      "capability_score": 88.0,
+      "qdrant_description": "GlobalLinker supports retail categories including Home and Decor (RET16), Fashion (RET12), Grocery (RET10), Electronics (RET14), Appliances (RET15), Beauty and Personal Care (RET13), and Health and Wellness (RET18). Operates across all Indian states covering All India geography. Supports both B2B and B2C transactions. Average onboarding time is 7 days. Strong in manufacturing sector MSEs. Best for handicrafts, multi-category MSEs, and B2B sellers."
+    },
+    {
+      "name": "Plotch",
+      "platform_name": "Plotch",
+      "description": "Fast onboarding, consumer-focused, catalogue quality support. Best for B2C MSEs wanting quick go-live, Home and Decor, Fashion.",
+      "contact_email": "support@plotch.io",
+      "ondc_live_status": true,
+      "supported_categories": [
+        "ONDC:RET10",
+        "ONDC:RET12",
+        "ONDC:RET13",
+        "ONDC:RET14",
+        "ONDC:RET15",
+        "ONDC:RET16",
+        "ONDC:RET18"
+      ],
+      "supported_states": [
+        "All India"
+      ],
+      "b2b": false,
+      "b2c": true,
+      "avg_onboarding_days": 5,
+      "capability_score": 82.0,
+      "qdrant_description": "Plotch supports retail categories including Home and Decor (RET16), Fashion (RET12), Grocery (RET10), Electronics (RET14), and Beauty and Personal Care (RET13). Operates across all Indian states. Only supports B2C transactions. Average onboarding time is 5 days which is among the fastest. Ideal for consumer-focused MSEs wanting quick go-live on ONDC."
+    },
+    {
+      "name": "SellerApp",
+      "platform_name": "SellerApp",
+      "description": "Strong analytics, seller performance tools. Best for Electronics (RET14), tech-forward MSEs.",
+      "contact_email": "ondc@sellerapp.com",
+      "ondc_live_status": true,
+      "supported_categories": [
+        "ONDC:RET10",
+        "ONDC:RET12",
+        "ONDC:RET14",
+        "ONDC:RET16"
+      ],
+      "supported_states": [
+        "All India"
+      ],
+      "b2b": true,
+      "b2c": true,
+      "avg_onboarding_days": 10,
+      "capability_score": 75.0,
+      "qdrant_description": "SellerApp supports Grocery (RET10), Fashion (RET12), Electronics (RET14), and Home and Decor (RET16) categories. Operates across all Indian states. Supports both B2B and B2C transactions. Average onboarding time is 10 days. Provides strong analytics and seller performance tools. Best for electronics and tech-forward MSEs."
+    },
+    {
+      "name": "eSamudaay",
+      "platform_name": "eSamudaay",
+      "description": "Specialist in Food and Beverages (RET11). Fastest onboarding at 4 days. Best for pickle, snack, packaged food MSEs.",
+      "contact_email": "hello@esamudaay.com",
+      "ondc_live_status": true,
+      "supported_categories": [
+        "ONDC:RET11"
+      ],
+      "supported_states": [
+        "All India"
+      ],
+      "b2b": false,
+      "b2c": true,
+      "avg_onboarding_days": 4,
+      "capability_score": 80.0,
+      "qdrant_description": "eSamudaay is a specialist SNP focused exclusively on Food and Beverages (RET11) category. Operates across all Indian states. Only B2C transactions supported. Fastest onboarding at 4 days. Best for MSEs making pickles, snacks, packaged food, beverages, jams, and chutneys."
+    },
+    {
+      "name": "DotPe",
+      "platform_name": "DotPe",
+      "description": "Strong consumer reach, popular with food and fashion. Best for multi-category B2C MSEs, F&B + Fashion combination.",
+      "contact_email": "sellers@dotpe.in",
+      "ondc_live_status": true,
+      "supported_categories": [
+        "ONDC:RET10",
+        "ONDC:RET11",
+        "ONDC:RET12",
+        "ONDC:RET13",
+        "ONDC:RET16"
+      ],
+      "supported_states": [
+        "All India"
+      ],
+      "b2b": false,
+      "b2c": true,
+      "avg_onboarding_days": 6,
+      "capability_score": 78.0,
+      "qdrant_description": "DotPe supports Grocery (RET10), Food and Beverages (RET11), Fashion (RET12), Beauty and Personal Care (RET13), and Home and Decor (RET16) categories. Covers all Indian states. B2C only. Average onboarding 6 days. Strong consumer reach popular with food and fashion sellers. Best for multi-category B2C MSEs combining F&B and Fashion."
+    },
+    {
+      "name": "MyStore",
+      "platform_name": "MyStore",
+      "description": "Easy-to-use seller interface, good for first-time digital sellers. Best for first-time digital MSEs, Home and Decor, Fashion.",
+      "contact_email": "support@mystore.in",
+      "ondc_live_status": true,
+      "supported_categories": [
+        "ONDC:RET10",
+        "ONDC:RET12",
+        "ONDC:RET13",
+        "ONDC:RET14",
+        "ONDC:RET16"
+      ],
+      "supported_states": [
+        "All India"
+      ],
+      "b2b": false,
+      "b2c": true,
+      "avg_onboarding_days": 7,
+      "capability_score": 72.0,
+      "qdrant_description": "MyStore supports Grocery (RET10), Fashion (RET12), Beauty and Personal Care (RET13), Electronics (RET14), and Home and Decor (RET16) categories. All India coverage. B2C only. Average onboarding 7 days. Easy-to-use seller interface makes it ideal for first-time digital sellers venturing into e-commerce."
+    }
+  ]
+}

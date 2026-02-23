@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+*.egg
+.env
+config/.secrets.toml
+migrations/versions/*.py
+!migrations/versions/.gitkeep

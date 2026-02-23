@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+.env
+
+# Secrets — NEVER commit
+backend/config/.secrets.toml
+*.secrets.toml
+
+# Alembic generated (keep versions)
+backend/migrations/versions/*.pyc
+
+# Node
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.turbo/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Docker volumes
+postgres_data/
+redis_data/
+qdrant_data/
+
+# Sentence transformers cache
+*.bin
+*.safetensors
+sentence_transformers/
+
+# Claude memory (local only)
+.claude/

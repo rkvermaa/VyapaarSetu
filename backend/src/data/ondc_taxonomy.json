@@ -1,0 +1,317 @@
+{
+  "categories": [
+    {
+      "code": "ONDC:RET10",
+      "name": "Grocery",
+      "domain": "retail",
+      "description": "Grocery items including spices, pulses, rice, oils, condiments manufactured/packed by MSEs",
+      "mse_types": [
+        "Spices manufacturers",
+        "Pulses packers",
+        "Condiment makers",
+        "Rice/wheat millers"
+      ],
+      "required_attributes": [
+        "product_name",
+        "mrp",
+        "net_weight_or_volume",
+        "expiry_date",
+        "fssai_license_no",
+        "country_of_origin",
+        "manufacturer_name",
+        "brand"
+      ],
+      "optional_attributes": [
+        "organic_certification",
+        "ingredients",
+        "nutritional_info"
+      ],
+      "example_products": [
+        "Red chilli powder",
+        "Turmeric",
+        "Basmati rice",
+        "Mustard oil",
+        "Dal lentils"
+      ]
+    },
+    {
+      "code": "ONDC:RET11",
+      "name": "Food and Beverages",
+      "domain": "retail",
+      "description": "Packaged food, pickles, snacks, beverages, jams, chutneys made by MSEs",
+      "mse_types": [
+        "Packaged food makers",
+        "Pickle/jam/chutney producers",
+        "Snack manufacturers",
+        "Beverage producers"
+      ],
+      "required_attributes": [
+        "product_name",
+        "mrp",
+        "net_weight",
+        "expiry_date",
+        "fssai_license_no",
+        "ingredients",
+        "country_of_origin",
+        "manufacturer_name"
+      ],
+      "optional_attributes": [
+        "allergen_info",
+        "nutritional_facts",
+        "storage_instructions"
+      ],
+      "example_products": [
+        "Mango pickle",
+        "Murabba",
+        "Papad",
+        "Biscuits",
+        "Namkeen",
+        "Fruit juice"
+      ]
+    },
+    {
+      "code": "ONDC:RET12",
+      "name": "Fashion",
+      "domain": "retail",
+      "description": "Handloom textiles, garments, sarees, kurtas, embroidery items",
+      "mse_types": [
+        "Handloom weavers",
+        "Textile manufacturers",
+        "Garment makers",
+        "Embroidery artisans"
+      ],
+      "required_attributes": [
+        "product_name",
+        "mrp",
+        "size",
+        "material_fabric",
+        "colour",
+        "care_instructions",
+        "country_of_origin"
+      ],
+      "optional_attributes": [
+        "pattern",
+        "occasion",
+        "wash_type",
+        "brand"
+      ],
+      "example_products": [
+        "Handloom saree",
+        "Khadi kurta",
+        "Block print dupatta",
+        "Silk stole",
+        "Embroidered cushion cover"
+      ]
+    },
+    {
+      "code": "ONDC:RET13",
+      "name": "Beauty and Personal Care",
+      "domain": "retail",
+      "description": "Herbal products, hair oils, natural soaps, cosmetics made by MSEs",
+      "mse_types": [
+        "Herbal product makers",
+        "Hair oil producers",
+        "Natural soap makers",
+        "Cosmetic manufacturers"
+      ],
+      "required_attributes": [
+        "product_name",
+        "mrp",
+        "net_weight_or_volume",
+        "ingredients",
+        "shelf_life",
+        "manufacturer_name",
+        "country_of_origin"
+      ],
+      "optional_attributes": [
+        "skin_type",
+        "certifications",
+        "usage_instructions"
+      ],
+      "example_products": [
+        "Herbal hair oil",
+        "Natural soap",
+        "Ubtan powder",
+        "Aloe vera gel",
+        "Herbal shampoo"
+      ]
+    },
+    {
+      "code": "ONDC:RET14",
+      "name": "Electronics",
+      "domain": "retail",
+      "description": "Electronic components, accessories, small devices assembled by MSEs",
+      "mse_types": [
+        "Electronic component makers",
+        "Accessories manufacturers",
+        "Small device assemblers"
+      ],
+      "required_attributes": [
+        "product_name",
+        "mrp",
+        "brand",
+        "model_number",
+        "warranty_period",
+        "country_of_origin"
+      ],
+      "optional_attributes": [
+        "compatibility",
+        "certifications",
+        "package_contents"
+      ],
+      "example_products": [
+        "USB cables",
+        "Phone accessories",
+        "LED bulbs",
+        "Electronic components"
+      ]
+    },
+    {
+      "code": "ONDC:RET15",
+      "name": "Appliances",
+      "domain": "retail",
+      "description": "Small appliances and kitchen equipment manufactured by MSEs",
+      "mse_types": [
+        "Small appliance manufacturers",
+        "Kitchen equipment makers"
+      ],
+      "required_attributes": [
+        "product_name",
+        "mrp",
+        "brand",
+        "warranty",
+        "power_consumption",
+        "voltage",
+        "country_of_origin"
+      ],
+      "optional_attributes": [
+        "energy_rating",
+        "package_contents",
+        "installation_required"
+      ],
+      "example_products": [
+        "Mixer grinder",
+        "Water purifier parts",
+        "Electric kettle"
+      ]
+    },
+    {
+      "code": "ONDC:RET16",
+      "name": "Home and Decor",
+      "domain": "retail",
+      "description": "Brass items, handicrafts, wooden crafts, pottery, jute products made by artisan MSEs",
+      "mse_types": [
+        "Brass artisans",
+        "Wooden craft makers",
+        "Pottery artists",
+        "Handicraft producers",
+        "Furniture makers"
+      ],
+      "required_attributes": [
+        "product_name",
+        "mrp",
+        "material",
+        "dimensions_cm",
+        "colour",
+        "country_of_origin",
+        "moq"
+      ],
+      "optional_attributes": [
+        "finish_type",
+        "weight_kg",
+        "care_instructions",
+        "customization_available"
+      ],
+      "example_products": [
+        "Brass diyas",
+        "Wooden toys",
+        "Terracotta pots",
+        "Jute baskets",
+        "Marble inlay items",
+        "Cane furniture"
+      ]
+    },
+    {
+      "code": "ONDC:RET17",
+      "name": "Toys and Games",
+      "domain": "retail",
+      "description": "Handmade toys, wooden toys, traditional games by artisan MSEs",
+      "mse_types": [
+        "Handmade toy makers",
+        "Wooden toy artisans",
+        "Traditional game makers"
+      ],
+      "required_attributes": [
+        "product_name",
+        "mrp",
+        "age_group",
+        "material",
+        "country_of_origin"
+      ],
+      "optional_attributes": [
+        "educational_value",
+        "battery_required",
+        "dimensions"
+      ],
+      "example_products": [
+        "Wooden alphabet blocks",
+        "Channapatna toys",
+        "Clay toys",
+        "Traditional games"
+      ]
+    },
+    {
+      "code": "ONDC:RET18",
+      "name": "Health and Wellness",
+      "domain": "retail",
+      "description": "Herbal, Ayurvedic, and organic wellness products by MSEs",
+      "mse_types": [
+        "Herbal product manufacturers",
+        "Ayurvedic item makers",
+        "Organic wellness producers"
+      ],
+      "required_attributes": [
+        "product_name",
+        "mrp",
+        "net_weight",
+        "ingredients",
+        "manufacturer_name",
+        "country_of_origin"
+      ],
+      "optional_attributes": [
+        "usage_instructions",
+        "contraindications",
+        "ayush_license"
+      ],
+      "example_products": [
+        "Chyawanprash",
+        "Herbal kadha",
+        "Immunity supplements",
+        "Yoga accessories"
+      ]
+    },
+    {
+      "code": "ONDC:RET19",
+      "name": "Pharma",
+      "domain": "retail",
+      "description": "Licensed pharmaceutical products (highly regulated, not primary focus)",
+      "mse_types": [
+        "Licensed pharmaceutical manufacturers"
+      ],
+      "required_attributes": [
+        "product_name",
+        "mrp",
+        "composition",
+        "manufacturer_name",
+        "batch_number",
+        "expiry_date",
+        "drug_license_no"
+      ],
+      "optional_attributes": [],
+      "example_products": [
+        "Medicines",
+        "Healthcare products"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+# Default settings (committed to git)
+
+[default]
+app_name = "VyapaarSetu"
+debug = false
+api_prefix = "/api/v1"
+
+# Server
+host = "0.0.0.0"
+port = 8000
+
+# Database
+database_pool_size = 10
+database_max_overflow = 20
+
+# Redis
+redis_db = 0
+
+# Qdrant Vector Database
+qdrant_url = "http://localhost:6333"
+qdrant_collection_taxonomy = "vyapaarsetu_taxonomy"
+qdrant_collection_snp = "vyapaarsetu_snp"
+qdrant_collection_knowledge = "vyapaarsetu_knowledge"
+
+# JWT
+jwt_algorithm = "HS256"
+jwt_expire_minutes = 1440  # 24 hours
+
+# LLM Configuration
+default_llm_provider = "deepseek"
+default_llm_model = "deepseek-chat"
+
+# Embedding Model (sentence-transformers - local, free)
+embedding_model = "sentence-transformers/all-MiniLM-L6-v2"
+embedding_dimension = 384
+
+# Agent Configuration
+max_history_messages = 20
+max_history_tokens = 4000
+max_rag_chunks = 5
+max_tool_iterations = 5
+
+# Baileys WhatsApp Service
+baileys_service_url = "http://127.0.0.1:3001"
+baileys_api_key = "baileys-secret-key"
+
+# Logging
+log_level = "INFO"
+log_format = "json"
+
+[development]
+debug = true
+log_level = "DEBUG"
+log_format = "pretty"
+
+[production]
+debug = false
+log_level = "INFO"
+log_format = "json"
