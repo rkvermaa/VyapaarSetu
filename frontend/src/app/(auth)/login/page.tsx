@@ -33,13 +33,14 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     try {
+      const trimmedMobile = mobile.trim();
       if (mode === "register") {
-        const res = await api.register(udyam, mobile, password);
-        setAuth(res.access_token, res.user_id, mobile, res.role);
+        const res = await api.register(udyam, trimmedMobile, password.trim());
+        setAuth(res.access_token, res.user_id, trimmedMobile, res.role);
         toast.success("Registered!"); router.push("/onboarding/profile");
       } else {
-        const res = await api.login(mobile, password);
-        setAuth(res.access_token, res.user_id, mobile, res.role);
+        const res = await api.login(trimmedMobile, password.trim());
+        setAuth(res.access_token, res.user_id, trimmedMobile, res.role);
         toast.success("Welcome!");
         if (res.role === "snp") router.push("/snp/dashboard");
         else if (res.role === "admin") router.push("/admin/dashboard");
@@ -89,7 +90,7 @@ export default function LoginPage() {
             )}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
-              <input value={mobile} onChange={(e) => setMobile(e.target.value)} placeholder="9876543210" required
+              <input value={mobile} onChange={(e) => setMobile(e.target.value)} placeholder="7409210692" required
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none" />
             </div>
             <div>
@@ -103,8 +104,10 @@ export default function LoginPage() {
               {mode === "register" ? "Create Account" : "Login"}
             </button>
           </form>
-          <div className="mt-4 text-center text-xs text-gray-400">
-            Demo: <span className="font-mono">9876543210</span> / <span className="font-mono">demo1234</span>
+          <div className="mt-4 space-y-1 text-center text-xs text-gray-400">
+            <div>MSE: <span className="font-mono">7409210692</span> / <span className="font-mono">demo1234</span></div>
+            <div>SNP: <span className="font-mono">9000000001</span> / <span className="font-mono">snpdemo</span></div>
+            <div>Admin: <span className="font-mono">9000000002</span> / <span className="font-mono">admindemo</span></div>
           </div>
         </div>
       </div>

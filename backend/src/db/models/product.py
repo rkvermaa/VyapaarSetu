@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime, timezone
 from enum import Enum
 
-from sqlalchemy import String, Float, DateTime, Text, JSON, ForeignKey, Enum as SAEnum
+from sqlalchemy import String, Float, DateTime, Text, JSON, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -20,6 +20,7 @@ class ProductStatus(str, Enum):
 class ProductSource(str, Enum):
     WEB = "web"
     WHATSAPP = "whatsapp"
+    VOICE = "voice"
 
 
 class Product(Base):
@@ -49,14 +50,10 @@ class Product(Base):
 
     # Status
     status: Mapped[str] = mapped_column(
-        SAEnum(ProductStatus, name="product_status"),
-        default=ProductStatus.DRAFT.value,
-        nullable=False,
+        String(20), default=ProductStatus.DRAFT.value, nullable=False
     )
     source: Mapped[str] = mapped_column(
-        SAEnum(ProductSource, name="product_source"),
-        default=ProductSource.WEB.value,
-        nullable=False,
+        String(20), default=ProductSource.WEB.value, nullable=False
     )
 
     created_at: Mapped[datetime] = mapped_column(

@@ -35,9 +35,6 @@ export function getMSEProfile() { return request<MSEProfile>("/mse/profile"); }
 export function updateMSEProfile(data: Partial<MSEProfile>) {
   return request<{ success: boolean; onboarding_status: string }>("/mse/profile", { method: "PUT", body: JSON.stringify(data) });
 }
-export function getMSEPassword() {
-  return request<{ onboarding_status: string; steps: Array<{ step: string; label: string; completed: boolean }>; mse_id: string }>("/mse/status");
-}
 export function getMSEStatus() {
   return request<{ onboarding_status: string; steps: Array<{ step: string; label: string; completed: boolean }>; mse_id: string }>("/mse/status");
 }
@@ -52,8 +49,8 @@ export interface Product {
   missing_fields: string[] | null; status: string; source: string; created_at: string;
 }
 export function listProducts() { return request<Product[]>("/products/"); }
-export function addProduct(raw_description: string, source = "web") {
-  return request<Product>("/products/", { method: "POST", body: JSON.stringify({ raw_description, source }) });
+export function addProduct(raw_description: string, source = "web", voiceFields?: Record<string, string>) {
+  return request<Product>("/products/", { method: "POST", body: JSON.stringify({ raw_description, source, voice_fields: voiceFields }) });
 }
 export function updateProduct(id: string, data: Partial<Product>) {
   return request<{ success: boolean; compliance_score: number }>(`/products/${id}`, { method: "PUT", body: JSON.stringify(data) });
@@ -66,13 +63,14 @@ export function getCatalogueStatus() {
 }
 
 export interface CatalogueChatResponse { response: string; session_id: string; tool_calls_made: unknown[]; iterations: number; }
-export function catalogueChat(message: string, channel = "web") {
-  return request<CatalogueChatResponse>("/catalogue/chat", { method: "POST", body: JSON.stringify({ message, channel }) });
+export function catalogueChat(message: string, channel = "web", newSession = false) {
+  return request<CatalogueChatResponse>("/catalogue/chat", { method: "POST", body: JSON.stringify({ message, channel, new_session: newSession }) });
 }
 
 export interface SNPMatch {
-  id: string; snp_id: string; match_score: number; match_reasons: string[];
+  id: string; snp_id: string; snp_name: string; match_score: number; match_reasons: string[];
   category_overlap_score: number; geography_score: number; status: string;
+  avg_onboarding_days?: number;
 }
 export function generateMatches() { return request<{ success: boolean; matches: unknown[]; matches_generated: number }>("/match/generate", { method: "POST" }); }
 export function getRecommendations() { return request<SNPMatch[]>("/match/recommendations"); }
@@ -90,3 +88,47 @@ export function verifyMSE(mse_id: string, action: string) {
 export function getSNPLeads() { return request<unknown[]>("/snp/leads"); }
 export function acceptLead(mse_id: string) { return request<{ success: boolean }>(`/snp/leads/${mse_id}/accept`, { method: "PUT" }); }
 export function rejectLead(mse_id: string) { return request<{ success: boolean }>(`/snp/leads/${mse_id}/reject`, { method: "PUT" }); }
+
+// ─── Admin: WhatsApp Bot Management ───
+export function adminListBots() {
+  return request<Array<{ id: string; label: string; phone_number: string | null; status: string; created_at: string }>>("/admin/whatsapp/bots");
+}
+export function adminConnectBot(label = "WhatsApp Bot") {
+  return request<{ bot_id: string; connected: boolean; phone_number: string | null; qr_code: string | null }>("/admin/whatsapp/bots", {
+    method: "POST",
+    body: JSON.stringify({ label }),
+  });
+}
+export function adminGetBotStatus(botId: string) {
+  return request<{ connected: boolean; phone_number: string | null; status: string; qr_code: string | null }>(`/admin/whatsapp/bots/${botId}/status`);
+}
+export function adminDisconnectBot(botId: string) {
+  return request<{ success: boolean }>(`/admin/whatsapp/bots/${botId}/disconnect`, { method: "POST" });
+}
+export function adminResetBot(botId: string) {
+  return request<{ bot_id: string; connected: boolean; qr_code: string | null }>(`/admin/whatsapp/bots/${botId}/reset`, { method: "POST" });
+}
+export function getBotNumbers() {
+  return request<Array<{ phone_number: string; label: string }>>("/admin/bot-numbers");
+}
+
+// ─── Voice (Sarvam AI) ───
+export async function voiceSTT(audioBlob: Blob) {
+  const fd = new FormData();
+  fd.append("file", audioBlob, "input.wav");
+  return request<{ transcript: string }>("/voice/stt", { method: "POST", body: fd });
+}
+export async function voiceLID(text: string) {
+  const fd = new FormData();
+  fd.append("text", text);
+  return request<{ language_code: string; script_code?: string }>("/voice/lid", { method: "POST", body: fd });
+}
+export async function voiceTTS(text: string, langCode = "hi-IN") {
+  const fd = new FormData();
+  fd.append("text", text);
+  fd.append("lang_code", langCode);
+  return request<{ audio_id: string }>("/voice/tts", { method: "POST", body: fd });
+}
+export function voiceAudioURL(audioId: string) {
+  return `${API_BASE}/voice/audio/${audioId}`;
+}

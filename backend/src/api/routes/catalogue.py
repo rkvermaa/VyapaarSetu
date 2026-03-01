@@ -17,6 +17,7 @@ router = APIRouter(prefix="/catalogue", tags=["catalogue"])
 class CatalogueChat(BaseModel):
     message: str
     channel: str = "web"
+    new_session: bool = False
 
 
 @router.post("/chat")
@@ -26,6 +27,13 @@ async def catalogue_chat(req: CatalogueChat, db: DBSession, user_id: CurrentUser
     mse = result.scalar_one_or_none()
 
     chat_service = ChatService(db)
+
+    # Force new session — close existing ones so history starts fresh
+    if req.new_session:
+        await chat_service.close_active_sessions(
+            user_id=user_id, channel=req.channel, session_type="cataloguing",
+        )
+
     session = await chat_service.get_or_create_session(
         user_id=user_id,
         channel=req.channel,

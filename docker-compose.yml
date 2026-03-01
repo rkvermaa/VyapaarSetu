@@ -38,6 +38,20 @@ services:
     volumes:
       - qdrant_data:/qdrant/storage
 
+  baileys:
+    build: ./baileys-service
+    container_name: vyapaarsetu_baileys
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      BACKEND_URL: http://backend:8000
+      BACKEND_WEBHOOK_URL: http://backend:8000/api/v1/channel/whatsapp/webhook
+      USE_DB_AUTH: "true"
+      API_KEY: baileys-secret-key
+    depends_on:
+      - postgres
+
 volumes:
   postgres_data:
   qdrant_data:

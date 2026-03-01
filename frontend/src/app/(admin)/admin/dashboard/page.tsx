@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Loader2, Users, Package, CheckCircle, TrendingUp } from "lucide-react";
+import { Loader2, Users, Package, CheckCircle, TrendingUp, Wifi, WifiOff } from "lucide-react";
+import Link from "next/link";
 import * as api from "@/lib/api";
 
 function FunnelBar({ label, value, max, color }: { label: string; value: number; max: number; color: string }) {
@@ -22,13 +23,14 @@ function FunnelBar({ label, value, max, color }: { label: string; value: number;
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState<Record<string, unknown> | null>(null);
+  const [bots, setBots] = useState<Array<{ id: string; label: string; phone_number: string | null; status: string }>>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.getAdminStats()
-      .then(setStats)
-      .catch(() => toast.error("Failed to load stats"))
-      .finally(() => setLoading(false));
+    Promise.all([
+      api.getAdminStats().then(setStats).catch(() => toast.error("Failed to load stats")),
+      api.adminListBots().then(setBots).catch(() => {}),
+    ]).finally(() => setLoading(false));
   }, []);
 
   if (loading) return (
@@ -80,6 +82,41 @@ export default function AdminDashboardPage() {
           <FunnelBar label="SNP Matched" value={matched} max={total} color="bg-orange-500" />
           <FunnelBar label="Live on ONDC" value={live} max={total} color="bg-green-500" />
         </div>
+      </div>
+
+      {/* WhatsApp Bots Status */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="font-semibold text-gray-800">WhatsApp Bots</h2>
+          <Link href="/admin/whatsapp" className="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
+            Manage →
+          </Link>
+        </div>
+        {bots.length === 0 ? (
+          <div className="flex items-center gap-3 text-gray-400">
+            <WifiOff className="h-5 w-5" />
+            <span className="text-sm">No bots configured. <Link href="/admin/whatsapp" className="text-indigo-600 underline">Add one</Link></span>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {bots.map((bot) => (
+              <div key={bot.id} className="flex items-center gap-3 rounded-lg bg-gray-50 px-4 py-2.5">
+                {bot.status === "connected" ? (
+                  <Wifi className="h-4 w-4 text-green-500" />
+                ) : (
+                  <WifiOff className="h-4 w-4 text-gray-400" />
+                )}
+                <span className="text-sm font-medium text-gray-700">{bot.label}</span>
+                <span className="text-sm text-gray-400">{bot.phone_number ? `+${bot.phone_number}` : "—"}</span>
+                <span className={`ml-auto text-xs font-medium rounded-full px-2 py-0.5 ${
+                  bot.status === "connected" ? "bg-green-50 text-green-600" : "bg-gray-100 text-gray-500"
+                }`}>
+                  {bot.status}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* State breakdown if available */}

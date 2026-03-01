@@ -14,7 +14,8 @@ from src.db.models.product import Product, ProductStatus
 router = APIRouter(prefix="/match", tags=["match"])
 
 
-@router.post("/generate")
+@router.post("/generate", include_in_schema=True)
+@router.post("/generate/", include_in_schema=False)
 async def generate_matches(db: DBSession, user_id: CurrentUserId):
     """Run AI matching for MSE — saves top 3 to MSEMatch table."""
     result = await db.execute(select(MSE).where(MSE.user_id == uuid.UUID(user_id)))
@@ -103,30 +104,36 @@ async def generate_matches(db: DBSession, user_id: CurrentUserId):
     }
 
 
-@router.get("/recommendations")
+@router.get("/recommendations", include_in_schema=True)
+@router.get("/recommendations/", include_in_schema=False)
 async def get_recommendations(db: DBSession, user_id: CurrentUserId):
     """Get saved SNP recommendations for current MSE."""
+    from src.db.models.snp import SNP
+
     result = await db.execute(select(MSE).where(MSE.user_id == uuid.UUID(user_id)))
     mse = result.scalar_one_or_none()
     if not mse:
         raise HTTPException(status_code=404, detail="MSE profile not found")
 
     result = await db.execute(
-        select(MSEMatch)
+        select(MSEMatch, SNP)
+        .join(SNP, MSEMatch.snp_id == SNP.id)
         .where(MSEMatch.mse_id == mse.id)
         .order_by(MSEMatch.match_score.desc())
     )
-    matches = result.scalars().all()
+    rows = result.all()
 
     return [
         {
             "id": str(m.id),
             "snp_id": str(m.snp_id),
+            "snp_name": snp.name,
             "match_score": m.match_score,
             "match_reasons": m.match_reasons,
             "category_overlap_score": m.category_overlap_score,
             "geography_score": m.geography_score,
             "status": m.status,
+            "avg_onboarding_days": snp.avg_onboarding_days,
         }
-        for m in matches
+        for m, snp in rows
     ]

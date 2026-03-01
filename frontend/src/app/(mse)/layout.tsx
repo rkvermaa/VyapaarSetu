@@ -19,7 +19,7 @@ export default function MSELayout({ children }: { children: React.ReactNode }) {
       <aside className="w-56 bg-indigo-900 text-white flex flex-col">
         <div className="px-4 py-5 border-b border-indigo-800">
           <div className="font-bold text-lg">VyapaarSetu</div>
-          <div className="text-xs text-indigo-300">\u0935\u094d\u092f\u093e\u092a\u093e\u0930 \u0938\u0947\u0924\u0941</div>
+          <div className="text-xs text-indigo-300">व्यापार सेतु</div>
         </div>
         <nav className="flex-1 px-3 py-4 space-y-1">
           {[

@@ -1,11 +1,22 @@
 """Send WhatsApp notification via Baileys service."""
 
+import re
 from typing import Any
+
 import httpx
+from sqlalchemy import select
 
 from src.tools.base import BaseTool
 from src.core.logging import log
 from src.config import settings
+
+
+def _normalize_mobile(number: str) -> str:
+    """Ensure phone number has 91 country code for WhatsApp JID."""
+    number = re.sub(r"[^0-9]", "", number)
+    if len(number) == 10:
+        number = "91" + number
+    return number
 
 
 class SendNotificationTool(BaseTool):
@@ -21,7 +32,7 @@ class SendNotificationTool(BaseTool):
         "properties": {
             "whatsapp_number": {
                 "type": "string",
-                "description": "WhatsApp number with country code e.g. 919876543210",
+                "description": "WhatsApp number with country code e.g. 917409210692",
             },
             "message": {
                 "type": "string",
@@ -32,14 +43,47 @@ class SendNotificationTool(BaseTool):
                 "enum": ["registration", "catalogue_ready", "snp_matched", "onboarding_confirmed"],
                 "description": "Milestone type for tracking",
             },
+            "session_id": {
+                "type": "string",
+                "description": "Baileys session ID (bot ID) to send from. Auto-detected if omitted.",
+            },
         },
         "required": ["whatsapp_number", "message"],
     }
 
+    async def _get_baileys_session_id(self, explicit_session_id: str | None = None) -> str | None:
+        """Find an active connected Baileys session from the DB."""
+        if explicit_session_id:
+            return explicit_session_id
+
+        try:
+            from src.db.session import get_session_factory
+            from src.db.models.whatsapp_auth import WhatsAppAuth
+
+            session_factory = get_session_factory()
+            async with session_factory() as db:
+                result = await db.execute(
+                    select(WhatsAppAuth).where(WhatsAppAuth.status == "connected").limit(1)
+                )
+                auth = result.scalar_one_or_none()
+                if auth:
+                    return str(auth.id)
+        except Exception as e:
+            log.warning(f"Failed to find Baileys session: {e}")
+
+        return None
+
     async def execute(self, arguments: dict[str, Any], context: dict[str, Any]) -> dict:
-        whatsapp_number = arguments.get("whatsapp_number", "")
+        """Send a WhatsApp message via the Baileys service."""
+        raw_number = arguments.get("whatsapp_number", "")
+        # If it's already a JID (e.g. 12345@lid), pass it as-is to Baileys
+        if "@" in raw_number:
+            whatsapp_number = raw_number
+        else:
+            whatsapp_number = _normalize_mobile(raw_number)
         message = arguments.get("message", "")
         milestone = arguments.get("milestone", "general")
+        explicit_session = arguments.get("session_id")
 
         log.info(f"send_notification: to={whatsapp_number} milestone={milestone}")
 
@@ -47,10 +91,15 @@ class SendNotificationTool(BaseTool):
             baileys_url = settings.get("BAILEYS_SERVICE_URL", "http://127.0.0.1:3001")
             api_key = settings.get("BAILEYS_API_KEY", "baileys-secret-key")
 
+            session_id = await self._get_baileys_session_id(explicit_session)
+            if not session_id:
+                log.warning("No active Baileys session found — cannot send WhatsApp message")
+                return {"success": False, "error": "No active WhatsApp bot session"}
+
             async with httpx.AsyncClient(timeout=10.0) as client:
                 response = await client.post(
-                    f"{baileys_url}/send",
-                    json={"number": whatsapp_number, "message": message},
+                    f"{baileys_url}/sessions/{session_id}/send",
+                    json={"to": whatsapp_number, "message": message},
                     headers={"X-API-Key": api_key},
                 )
                 if response.status_code == 200:

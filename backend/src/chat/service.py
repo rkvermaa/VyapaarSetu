@@ -21,6 +21,33 @@ class ChatService:
     def __init__(self, db: AsyncSession):
         self.db = db
 
+    async def close_active_sessions(
+        self,
+        user_id: str,
+        channel: str = "web",
+        session_type: str = "general",
+    ) -> int:
+        """Close all active sessions for the given user/channel/type."""
+        result = await self.db.execute(
+            select(Session).where(
+                and_(
+                    Session.user_id == uuid.UUID(user_id),
+                    Session.channel == channel,
+                    Session.status == SessionStatus.ACTIVE.value,
+                )
+            )
+        )
+        sessions = result.scalars().all()
+        closed = 0
+        for session in sessions:
+            session.status = SessionStatus.CLOSED.value
+            closed += 1
+
+        if closed:
+            await self.db.flush()
+            log.info(f"Closed {closed} active {channel} session(s) for user {user_id}")
+        return closed
+
     async def get_or_create_session(
         self,
         user_id: str,

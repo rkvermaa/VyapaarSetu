@@ -8,8 +8,9 @@ from src.db.models.ondc_category import OndcCategory
 from src.db.models.mse_match import MSEMatch
 from src.db.models.session import Session
 from src.db.models.message import Message
+from src.db.models.whatsapp_auth import WhatsAppAuth
 
 __all__ = [
     "User", "MSE", "SNP", "Product", "OndcCategory",
-    "MSEMatch", "Session", "Message",
+    "MSEMatch", "Session", "Message", "WhatsAppAuth",
 ]

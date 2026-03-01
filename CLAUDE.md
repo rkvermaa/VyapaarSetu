@@ -360,7 +360,7 @@ VyapaarSetu/
 - No dead code, no unused imports
 - Docstrings on all public functions/classes
 - No `.env`, API keys, or `__pycache__` in git
-
+- backend is UV project make sure to follow uv command 
 ---
 
 ## Key References

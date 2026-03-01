@@ -78,14 +78,14 @@ async def seed_ondc_categories(db):
 async def seed_demo_mses(db):
     """Seed 3 demo MSE profiles for demo."""
     from sqlalchemy import select
-    result = await db.execute(select(User).where(User.mobile == '9876543210'))
+    result = await db.execute(select(User).where(User.mobile == '7409210692'))
     if result.scalar_one_or_none():
         log.info('Demo MSEs already seeded, skipping')
         return
 
     demos = [
         {
-            'user': {'mobile': '9876543210', 'role': 'mse'},
+            'user': {'mobile': '7409210692', 'role': 'mse'},
             'mse': {
                 'udyam_number': 'UDYAM-MH-01-0012345',
                 'business_name': 'Sharma Brass Works',
@@ -99,7 +99,7 @@ async def seed_demo_mses(db):
                 'employee_count': 12,
                 'transaction_type': 'b2c',
                 'target_states': ['Maharashtra', 'Gujarat', 'Delhi'],
-                'whatsapp_number': '919876543210',
+                'whatsapp_number': '917409210692',
                 'onboarding_status': 'catalogue_ready',
             },
             'products': [
@@ -314,7 +314,7 @@ async def main():
 
     log.info('==================================================')
     log.info('SEED COMPLETE! Demo credentials:')
-    log.info('MSE 1 (Brass): mobile=9876543210 password=demo1234')
+    log.info('MSE 1 (Brass): mobile=7409210692 password=demo1234')
     log.info('MSE 2 (Textiles): mobile=9876543211 password=demo1234')
     log.info('MSE 3 (Organic): mobile=9876543212 password=demo1234')
     log.info('SNP: mobile=9000000001 password=snpdemo')

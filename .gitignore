@@ -24,6 +24,8 @@ frontend/node_modules/
 frontend/.next/
 frontend/out/
 frontend/.turbo/
+baileys-service/node_modules/
+baileys-service/auth_info/
 
 # OS
 .DS_Store

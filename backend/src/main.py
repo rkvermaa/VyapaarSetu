@@ -47,6 +47,7 @@ app = FastAPI(
     description="AI-powered MSE Agent Mapping Tool for ONDC TEAM Initiative",
     version="0.1.0",
     lifespan=lifespan,
+    redirect_slashes=False,
 )
 
 app.add_middleware(
@@ -65,6 +66,7 @@ from src.api.routes.match import router as match_router
 from src.api.routes.snp import router as snp_router
 from src.api.routes.admin import router as admin_router
 from src.api.routes.chat import router as chat_router
+from src.api.routes.voice import router as voice_router
 from src.api.routes.channel.whatsapp import router as whatsapp_router
 
 PREFIX = settings.get("API_PREFIX", "/api/v1")
@@ -77,6 +79,7 @@ app.include_router(match_router, prefix=PREFIX)
 app.include_router(snp_router, prefix=PREFIX)
 app.include_router(admin_router, prefix=PREFIX)
 app.include_router(chat_router, prefix=PREFIX)
+app.include_router(voice_router, prefix=PREFIX)
 app.include_router(whatsapp_router, prefix=PREFIX)
 
 

@@ -134,7 +134,7 @@ export default function MatchPage() {
         ) : (
           <div className="space-y-4">
             {matches.map((match, idx) => {
-              const snpName = (match as unknown as Record<string, string>).snp_name || `SNP ${idx + 1}`;
+              const snpName = match.snp_name || `SNP ${idx + 1}`;
               const colorClass = SNP_COLORS[snpName] || "bg-gray-100 text-gray-800";
               const isSelected = selected === match.snp_id;
               return (
@@ -161,8 +161,8 @@ export default function MatchPage() {
                       <div className="flex items-center gap-2 mb-2">
                         <span className={`rounded-full px-3 py-1 text-sm font-bold ${colorClass}`}>{snpName}</span>
                         <span className="text-xs text-gray-400">
-                          {(match as unknown as Record<string, string>).avg_onboarding_days
-                            ? `~${(match as unknown as Record<string, string>).avg_onboarding_days} days onboarding`
+                          {match.avg_onboarding_days
+                            ? `~${match.avg_onboarding_days} days onboarding`
                             : ""}
                         </span>
                       </div>

@@ -18,6 +18,7 @@ router = APIRouter(prefix="/products", tags=["products"])
 class ProductCreate(BaseModel):
     raw_description: str
     source: str = "web"
+    voice_fields: dict | None = None  # Pre-extracted fields from voice agent
 
 
 class ProductUpdate(BaseModel):
@@ -37,7 +38,8 @@ async def _get_mse(user_id: str, db) -> MSE:
     return mse
 
 
-@router.post("/")
+@router.post("/", include_in_schema=True)
+@router.post("", include_in_schema=False)
 async def add_product(req: ProductCreate, db: DBSession, user_id: CurrentUserId):
     """Add a new product — triggers AI cataloguing."""
     mse = await _get_mse(user_id, db)
@@ -73,12 +75,20 @@ async def add_product(req: ProductCreate, db: DBSession, user_id: CurrentUserId)
             {"description": req.raw_description, "category_code": category_code}, {}
         )
         attributes = extract_result.get("attributes", {})
-        missing_fields = extract_result.get("missing_fields", [])
+
+        # For voice products, merge pre-extracted fields (voice agent already parsed these)
+        if req.voice_fields:
+            for key, val in req.voice_fields.items():
+                if key == "mobile_verified":
+                    continue
+                if val and str(val).strip():
+                    attributes[key] = str(val).strip()
 
         validate_result = await validate_tool.execute(
             {"attributes": attributes, "category_code": category_code}, {}
         )
         compliance_score = validate_result.get("compliance_score", 0.0)
+        missing_fields = validate_result.get("missing_fields", [])
 
         product.product_name = attributes.get("product_name") or req.raw_description[:50]
         product.ondc_category_code = category_code
@@ -91,6 +101,26 @@ async def add_product(req: ProductCreate, db: DBSession, user_id: CurrentUserId)
             product.status = ProductStatus.READY.value
 
         await db.flush()
+
+        # Send WhatsApp follow-up for voice products with missing fields
+        if req.source == "voice" and missing_fields and mse.whatsapp_number:
+            try:
+                from src.tools.core.send_notification import SendNotificationTool
+                product_label = attributes.get("product_name") or req.raw_description[:30]
+                missing_str = ", ".join(missing_fields[:5])
+                wa_msg = (
+                    f"VyapaarSetu: Product \"{product_label}\" add ho gaya!\n"
+                    f"Category: {category_code} | Compliance: {compliance_score:.0f}%\n"
+                    f"Missing: {missing_str}\n"
+                    f"Yahan reply karke missing fields bhejiye."
+                )
+                notif_tool = SendNotificationTool()
+                await notif_tool.execute(
+                    {"whatsapp_number": mse.whatsapp_number, "message": wa_msg, "milestone": "catalogue_ready"},
+                    {},
+                )
+            except Exception as wa_err:
+                log.warning(f"WhatsApp follow-up failed: {wa_err}")
 
     except Exception as e:
         log.error(f"AI cataloguing failed for product {product.id}: {e}")
@@ -107,7 +137,8 @@ async def add_product(req: ProductCreate, db: DBSession, user_id: CurrentUserId)
     }
 
 
-@router.get("/")
+@router.get("/", include_in_schema=True)
+@router.get("", include_in_schema=False)
 async def list_products(db: DBSession, user_id: CurrentUserId):
     """List all products for the current MSE."""
     mse = await _get_mse(user_id, db)

@@ -79,7 +79,7 @@ async def accept_lead(mse_id: str, db: DBSession, user_id: CurrentUserId):
 
 
 @router.put("/leads/{mse_id}/reject")
-async def reject_lead(mse_id: str, reason: str = "", db: DBSession = None, user_id: CurrentUserId = None):
+async def reject_lead(mse_id: str, db: DBSession, user_id: CurrentUserId, reason: str = ""):
     """Reject an MSE lead."""
     result = await db.execute(
         select(MSEMatch).where(MSEMatch.mse_id == uuid.UUID(mse_id))

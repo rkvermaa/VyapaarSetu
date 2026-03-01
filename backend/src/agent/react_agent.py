@@ -14,6 +14,8 @@ from src.tools.registry import ToolRegistry
 from src.skills.loader import SkillLoader
 from src.rag.qdrant_search import QdrantSearch, KNOWLEDGE_COLLECTION
 from src.agent.prompts.base import BASE_SYSTEM_PROMPT, KNOWLEDGE_PROMPT, WHATSAPP_RULES_PROMPT
+from src.agent.prompts.voice import VOICE_CATALOGUE_PROMPT
+from src.agent.prompts.whatsapp_catalogue import WHATSAPP_CATALOGUE_PROMPT
 
 
 class ReactAgent:
@@ -27,11 +29,13 @@ class ReactAgent:
         session_id: str,
         channel: str = "web",
         mse_id: str | None = None,
+        product_context: str = "",
     ):
         self.user_id = user_id
         self.session_id = session_id
         self.channel = channel
         self.mse_id = mse_id
+        self._product_context = product_context
         self.llm = get_llm_client()
         self.tool_registry = ToolRegistry()
         self._tool_calls_made: list[dict] = []
@@ -131,6 +135,33 @@ class ReactAgent:
 
         today = date.today().strftime("%d %B %Y")
         skill_name = skill["name"]
+
+        # Voice channel: use dedicated short-response prompt
+        if self.channel == "voice":
+            log.info("Using VOICE_CATALOGUE_PROMPT (voice channel)")
+            parts = [
+                VOICE_CATALOGUE_PROMPT,
+                f"\n## Today Date: {today}",
+            ]
+            history_context = self._build_history_context(history or [])
+            if history_context:
+                parts.append(history_context)
+            return "\n\n".join(parts)
+
+        # WhatsApp + cataloguing: use dedicated short WhatsApp prompt
+        if self.channel == "whatsapp" and skill.get("slug") == "cataloguing":
+            log.info("Using WHATSAPP_CATALOGUE_PROMPT (whatsapp + cataloguing)")
+            parts = [
+                WHATSAPP_CATALOGUE_PROMPT,
+                f"\n## Today Date: {today}",
+            ]
+            if self._product_context:
+                parts.append(self._product_context)
+            history_context = self._build_history_context(history or [])
+            if history_context:
+                parts.append(history_context)
+            return "\n\n".join(parts)
+
         parts = [
             BASE_SYSTEM_PROMPT,
             f"\n## Today Date: {today}",
